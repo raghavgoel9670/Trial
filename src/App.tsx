@@ -56,7 +56,8 @@ const PRODUCT_SERIES = [
   { id: 'rhino', name: 'RHINO Series', desc: 'Heavy-duty cooling for large spaces and commercial use.' },
   { id: 'terminator', name: 'Terminator Series', desc: 'Powerful airflow with rugged design and high performance.' },
   { id: 'nexo', name: 'NEXO Series', desc: 'Compact and stylish cooling for homes and small spaces.' },
-  { id: 'standard', name: 'Standard Series', desc: 'Reliable and efficient cooling for everyday household needs.' },
+  { id: 'standard', name: 'Standard Series', desc: 'Reliable and efficient cooling for everyday household needs.' }, 
+  { id: 'copper', name: 'Copper Heavy Duty Series', desc: 'Superior cooling performance with heavy duty copper winding technology.' },
   { id: 'heavy-duty', name: 'Heavy Duty Series', desc: 'Robust construction with superior air delivery for intense heat.' }
 ];
 
