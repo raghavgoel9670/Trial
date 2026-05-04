@@ -140,6 +140,42 @@ const PRODUCTS: Product[] = [
       dimensions: '850 X 630 X 1500 mm'
     }
   },
+  {
+    id: 'terminator-dlx-160',
+    name: 'Terminator DLX 160',
+    series: 'Terminator',
+    tagline: 'Reliable Air Throw',
+    desc: 'High performance cooling in a rugged, military-styled design.',
+    image: 'https://images.unsplash.com/photo-1585338007604-f3da7428c5a8?auto=format&fit=crop&q=80&w=800',
+    specs: {
+      airFlow: '6200 m3/h',
+      fanSize: '22 Inches',
+      tankCapacity: '125 LTR',
+      ratedPower: '430W',
+      verticalLouvers: 'Auto Swing',
+      horizontalLouvers: 'Manual',
+      castorWheels: 'YES',
+      dimensions: '850 X 630 X 1450 mm'
+    }
+  },
+  {
+    id: 'terminator-160',
+    name: 'Terminator 160',
+    series: 'Terminator',
+    tagline: 'Compact High Flow',
+    desc: 'Efficient airflow design for tight spaces without compromising on power.',
+    image: 'https://images.unsplash.com/photo-1585338007604-f3da7428c5a8?auto=format&fit=crop&q=80&w=800',
+    specs: {
+      airFlow: '6200 m3/h',
+      fanSize: '22 Inches',
+      tankCapacity: '100 LTR',
+      ratedPower: '430W',
+      verticalLouvers: 'Auto Swing',
+      horizontalLouvers: 'Manual',
+      castorWheels: 'YES',
+      dimensions: '850 X 630 X 1340 mm'
+    }
+  },
   // NEXO
   {
     id: 'nexo-120-dlx',
@@ -248,6 +284,79 @@ const PRODUCTS: Product[] = [
       horizontalLouvers: 'Manual',
       castorWheels: 'YES',
       dimensions: '686 X 584 X 1473 mm'
+    }
+  },
+  {
+    id: '140-st-std',
+    name: '140 ST',
+    series: 'Standard',
+    tagline: 'Compact Reliability',
+    desc: 'Indigenous technology for small to medium room cooling.',
+    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    specs: {
+      airFlow: '5100 m3/h',
+      fanSize: '20 Inches',
+      tankCapacity: '130 LTR',
+      ratedPower: '310W',
+      verticalLouvers: 'Auto Swing',
+      horizontalLouvers: 'Manual',
+      castorWheels: 'YES',
+      dimensions: '660 X 584 X 1473 mm'
+    }
+  },
+  // COPPER HEAVY DUTY
+  {
+    id: '160-st-plus-copper',
+    name: '160 ST+',
+    series: 'Copper Heavy Duty',
+    tagline: 'Copper Performance',
+    desc: 'Premium series featuring heavy duty copper winding for extreme durability.',
+    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    specs: {
+      airFlow: '6200 m3/h',
+      fanSize: '22 Inches',
+      tankCapacity: '150 LTR',
+      ratedPower: '310W',
+      verticalLouvers: 'Auto Swing',
+      horizontalLouvers: 'Manual',
+      castorWheels: 'YES',
+      dimensions: '711 X 584 X 1473 mm'
+    }
+  },
+  {
+    id: '150-st-copper',
+    name: '150 ST',
+    series: 'Copper Heavy Duty',
+    tagline: 'High Efficiency Copper',
+    desc: 'Reliable cooling with long-lasting motor life through copper technology.',
+    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    specs: {
+      airFlow: '6200 m3/h',
+      fanSize: '22 Inches',
+      tankCapacity: '150 LTR',
+      ratedPower: '310W',
+      verticalLouvers: 'Auto Swing',
+      horizontalLouvers: 'Manual',
+      castorWheels: 'YES',
+      dimensions: '686 X 584 X 1473 mm'
+    }
+  },
+  {
+    id: '140-st-copper',
+    name: '140 ST',
+    series: 'Copper Heavy Duty',
+    tagline: 'Compact Copper Power',
+    desc: 'Powerful copper-wound motor in a space-saving design.',
+    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    specs: {
+      airFlow: '5100 m3/h',
+      fanSize: '20 Inches',
+      tankCapacity: '130 LTR',
+      ratedPower: '310W',
+      verticalLouvers: 'Auto Swing',
+      horizontalLouvers: 'Manual',
+      castorWheels: 'YES',
+      dimensions: '660 X 584 X 1473 mm'
     }
   },
   // HEAVY DUTY
