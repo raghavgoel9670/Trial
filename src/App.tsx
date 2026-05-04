@@ -442,6 +442,8 @@ const EnquirySection = ({ initialProduct = '', onBackHome }: any) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    console.log("🔥 FORM SUBMIT FIRED"); // ADD THIS
 
     const { error } = await supabase.from('enquiries').insert([
       { ...formData, product: initialProduct }
