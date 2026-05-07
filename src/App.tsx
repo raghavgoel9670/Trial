@@ -1,7 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { supabase } from "./supabase";
-import { useState } from "react";
 import { 
   Menu, 
   X, 
@@ -432,26 +431,47 @@ const Navbar = ({ onScreenChange, activeScreen }: any) => {
 
 const EnquirySection = ({ initialProduct = '', onBackHome }: any) => {
   const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    city: '',
-    message: ''
-  });
-
+  name: '',
+  phone: '',
+  enquiryType: 'Customer',
+  product: '',
+  city: '',
+  state: '',
+  message: ''
+});
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    console.log("🔥 FORM SUBMIT FIRED"); // ADD THIS
+  e.preventDefault();
 
-    const { error } = await supabase.from('enquiries').insert([
-      { ...formData, product: initialProduct }
-    ]);
+  console.log("Submitting form...");
 
-    if (!error) setSubmitted(true);
-    else alert('Error submitting');
-  };
+  const { data, error } = await supabase
+    .from("enquiries")
+    .insert([
+      {
+        full_name: formData.name,
+        mobile: formData.phone,
+        enquiry_type: formData.enquiryType,
+        interested_product: formData.product,
+        city: formData.city,
+        state: formData.state,
+        message: formData.message,
+      },
+    ])
+    .select();
+
+  console.log("DATA:", data);
+  console.log("ERROR:", error);
+
+  if (error) {
+    alert("Submission Failed");
+    console.error(error);
+  } else {
+    alert("Enquiry Submitted Successfully");
+    setSubmitted(true);
+  }
+};
 return (
     <div className="min-h-screen pt-24 px-6">
       {submitted ? (
@@ -463,22 +483,99 @@ return (
       ) : (
         <form onSubmit={handleSubmit} className="max-w-md mx-auto flex flex-col gap-4">
 
-          <input placeholder="Name" required value={formData.name}
-            onChange={e => setFormData({ ...formData, name: e.target.value })} />
+  <input
+    placeholder="Full Name"
+    required
+    value={formData.name}
+    onChange={e =>
+      setFormData({ ...formData, name: e.target.value })
+    }
+    className="p-3 text-black rounded"
+  />
 
-          <input placeholder="Phone" required value={formData.phone}
-            onChange={e => setFormData({ ...formData, phone: e.target.value })} />
+  <input
+    placeholder="Mobile Number"
+    required
+    value={formData.phone}
+    onChange={e =>
+      setFormData({ ...formData, phone: e.target.value })
+    }
+    className="p-3 text-black rounded"
+  />
 
-          <input placeholder="City" required value={formData.city}
-            onChange={e => setFormData({ ...formData, city: e.target.value })} />
+  {/* ENQUIRY TYPE */}
+  <select
+    value={formData.enquiryType}
+    onChange={e =>
+      setFormData({
+        ...formData,
+        enquiryType: e.target.value
+      })
+    }
+    className="p-3 text-black rounded"
+  >
+    <option value="Dealer">Dealer</option>
+    <option value="Distributor">Distributor</option>
+    <option value="Wholesaler">Wholesaler</option>
+  </select>
 
-          <textarea placeholder="Message" value={formData.message}
-            onChange={e => setFormData({ ...formData, message: e.target.value })} />
+  {/* PRODUCT */}
+  <input
+    placeholder="Interested Product"
+    value={formData.product}
+    onChange={e =>
+      setFormData({
+        ...formData,
+        product: e.target.value
+      })
+    }
+    className="p-3 text-black rounded"
+  />
 
-          <button type="submit" className="bg-orange-500 text-white p-3">
-            Submit
-          </button>
-        </form>
+  {/* CITY */}
+  <input
+    placeholder="City"
+    required
+    value={formData.city}
+    onChange={e =>
+      setFormData({ ...formData, city: e.target.value })
+    }
+    className="p-3 text-black rounded"
+  />
+
+  {/* STATE */}
+  <input
+    placeholder="State"
+    value={formData.state}
+    onChange={e =>
+      setFormData({
+        ...formData,
+        state: e.target.value
+      })
+    }
+    className="p-3 text-black rounded"
+  />
+
+  {/* MESSAGE */}
+  <textarea
+    placeholder="Message"
+    value={formData.message}
+    onChange={e =>
+      setFormData({
+        ...formData,
+        message: e.target.value
+      })
+    }
+    className="p-3 text-black rounded"
+  />
+
+  <button
+    type="submit"
+    className="bg-orange-500 text-white p-3 rounded"
+  >
+    Submit
+  </button>
+</form>
       )}
     </div>
   );
