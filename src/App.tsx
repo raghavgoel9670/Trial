@@ -1,27 +1,16 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { supabase } from "./supabase";
-import { 
-  Menu, 
-  X, 
-  ArrowRight, 
-  Wind, 
-  Zap, 
-  ShieldCheck, 
-  Factory, 
-  Home, 
-  Briefcase, 
-  ShoppingBag,
-  ChevronRight,
-  Phone,
+import {
   CheckCircle2,
-  ArrowLeft,
   Droplets,
   Layers,
   Settings,
   Shield,
   Trash2,
-  Thermometer
+  Thermometer,
+  Wind,
+  ArrowLeft
 } from 'lucide-react';
 
 // --- Types ---
@@ -431,17 +420,17 @@ const Navbar = ({ onScreenChange, activeScreen }: any) => {
 
 const EnquirySection = ({ initialProduct = '', onBackHome }: any) => {
   const [formData, setFormData] = useState({
-  name: '',
-  phone: '',
-  enquiryType: 'Customer',
-  product: '',
-  city: '',
-  state: '',
-  message: ''
-});
+    name: '',
+    phone: '',
+    enquiryType: 'Dealer',
+    product: initialProduct,
+    city: '',
+    state: '',
+    message: ''
+  });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
   e.preventDefault();
 
   console.log("Submitting form...");
@@ -592,31 +581,59 @@ export default function App() {
 
       <Navbar onScreenChange={setActiveScreen} activeScreen={activeScreen} />
 
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {activeScreen === 'home' && (
-          <motion.div key="home" className="p-10">
+          <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="p-10">
             <h1>TASHU COOLERS</h1>
           </motion.div>
         )}
 
-                {activeScreen === 'product-list' && (
-          <div className="p-10">
+        {activeScreen === 'product-list' && (
+          <motion.div key="product-list" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="p-10">
             {PRODUCTS.map(p => (
               <div key={p.id} onClick={() => {
                 setSelectedProduct(p);
                 setActiveScreen('product-detail');
               }} className="border p-4 mb-4 cursor-pointer">
                 <h3>{p.name}</h3>
+                <p className="text-sm text-gray-400">{p.series} — {p.tagline}</p>
               </div>
             ))}
-          </div>
+          </motion.div>
+        )}
+
+        {activeScreen === 'product-detail' && selectedProduct && (
+          <motion.div key="product-detail" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="pt-24 p-10 max-w-2xl mx-auto">
+            <button onClick={() => setActiveScreen('product-list')} className="flex items-center gap-2 mb-6 text-orange-500">
+              <ArrowLeft size={18} /> Back to Catalogue
+            </button>
+            <h2 className="text-2xl font-bold mb-1">{selectedProduct.name}</h2>
+            <p className="text-orange-400 mb-2">{selectedProduct.tagline}</p>
+            <p className="text-gray-300 mb-6">{selectedProduct.desc}</p>
+            <div className="grid grid-cols-2 gap-3 mb-6">
+              {Object.entries(selectedProduct.specs).map(([key, val]) => (
+                <div key={key} className="border border-gray-700 rounded p-3">
+                  <div className="text-xs text-gray-400 capitalize">{key.replace(/([A-Z])/g, ' $1')}</div>
+                  <div className="font-semibold">{val}</div>
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={() => setActiveScreen('enquiry')}
+              className="bg-orange-500 text-white px-6 py-3 rounded"
+            >
+              Enquire About This Product
+            </button>
+          </motion.div>
         )}
 
         {activeScreen === 'enquiry' && (
-          <EnquirySection
-            initialProduct={selectedProduct?.name || ''}
-            onBackHome={() => setActiveScreen('home')}
-          />
+          <motion.div key="enquiry" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <EnquirySection
+              initialProduct={selectedProduct?.name || ''}
+              onBackHome={() => setActiveScreen('home')}
+            />
+          </motion.div>
         )}
       </AnimatePresence>
     </div>
