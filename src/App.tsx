@@ -543,6 +543,7 @@ const HomeScreen = ({ onScreenChange, onSeriesSelect }: HomeScreenProps) => (
         transition={{ duration: 0.5, delay: 0.2 }}
         className="relative z-10 text-gray-400 text-lg md:text-xl max-w-lg mb-10 leading-relaxed"
       >
+        <span className="block text-2xl md:text-3xl font-black text-orange-500 tracking-widest mb-2">"MAUSAM BADAL DE"</span>
         Engineered for power. Built for durability. Trusted across India.
       </motion.p>
 
