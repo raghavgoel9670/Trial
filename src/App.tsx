@@ -1,4 +1,4 @@
-import { useState, FormEvent } from 'react';
+import React, { useState, FormEvent } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { supabase } from "./supabase";
 import {
@@ -10,7 +10,10 @@ import {
   Trash2,
   Thermometer,
   Wind,
-  ArrowLeft
+  ArrowLeft,
+  Menu,
+  X,
+  ChevronRight
 } from 'lucide-react';
 
 // --- Types ---
@@ -40,15 +43,28 @@ interface Product {
   bestFor?: string[];
 }
 
+interface SeriesItem {
+  id: string;
+  name: string;
+  desc: string;
+}
+
+interface FeatureDef {
+  name: string;
+  desc: string;
+  Icon: React.ComponentType<{ size?: number; className?: string }>;
+}
+
 // --- Data ---
 
-const PRODUCT_SERIES = [
-  { id: 'rhino', name: 'RHINO Series', desc: 'Heavy-duty cooling for large spaces and commercial use.' },
-  { id: 'terminator', name: 'Terminator Series', desc: 'Powerful airflow with rugged design and high performance.' },
-  { id: 'nexo', name: 'NEXO Series', desc: 'Compact and stylish cooling for homes and small spaces.' },
-  { id: 'standard', name: 'Standard Series', desc: 'Reliable and efficient cooling for everyday household needs.' }, 
-  { id: 'copper', name: 'Copper Heavy Duty Series', desc: 'Superior cooling performance with heavy duty copper winding technology.' },
-  { id: 'heavy-duty', name: 'Heavy Duty Series', desc: 'Robust construction with superior air delivery for intense heat.' }
+// Series IDs match the `series` field on each Product exactly
+const PRODUCT_SERIES: SeriesItem[] = [
+  { id: 'Rhino', name: 'RHINO Series', desc: 'Heavy-duty cooling for large spaces and commercial use.' },
+  { id: 'Terminator', name: 'Terminator Series', desc: 'Powerful airflow with rugged design and high performance.' },
+  { id: 'Nexo', name: 'NEXO Series', desc: 'Compact and stylish cooling for homes and small spaces.' },
+  { id: 'Standard', name: 'Standard Series', desc: 'Reliable and efficient cooling for everyday household needs.' },
+  { id: 'Copper Heavy Duty', name: 'Copper Heavy Duty Series', desc: 'Superior cooling performance with heavy duty copper winding technology.' },
+  { id: 'Heavy Duty', name: 'Heavy Duty Series', desc: 'Robust construction with superior air delivery for intense heat.' }
 ];
 
 const PRODUCTS: Product[] = [
@@ -388,37 +404,341 @@ const PRODUCTS: Product[] = [
   }
 ];
 
-const COMMON_FEATURES = [
-  { name: "Auto Tank Fill", desc: "Float Valve Technology for non-stop performance.", icon: <Droplets /> },
-  { name: "Auto Drain", desc: "Motorised water drainage system.", icon: <Trash2 /> },
-  { name: "Dust Filter", desc: "Filters out particles for clean, dust-free air.", icon: <Layers /> },
-  { name: "Ice Chamber", desc: "Speed up cooling with dedicated ice storage.", icon: <Thermometer /> },
-  { name: "Shower Channel", desc: "Even water distribution over EcoCool pads.", icon: <Wind /> },
-  { name: "Humidity Control", desc: "Adjust water usage for peak comfort.", icon: <Droplets /> },
-  { name: "Anti-Bacterial Tank", desc: "Plastic coating prevents fungal growth.", icon: <Shield /> },
-  { name: "DBB Motor", desc: "Heavy Duty Double Ball Bearing with Heat Sink.", icon: <Settings /> }
+// Icons stored as component references, not JSX instances
+const COMMON_FEATURES: FeatureDef[] = [
+  { name: "Auto Tank Fill", desc: "Float Valve Technology for non-stop performance.", Icon: Droplets },
+  { name: "Auto Drain", desc: "Motorised water drainage system.", Icon: Trash2 },
+  { name: "Dust Filter", desc: "Filters out particles for clean, dust-free air.", Icon: Layers },
+  { name: "Ice Chamber", desc: "Speed up cooling with dedicated ice storage.", Icon: Thermometer },
+  { name: "Shower Channel", desc: "Even water distribution over EcoCool pads.", Icon: Wind },
+  { name: "Humidity Control", desc: "Adjust water usage for peak comfort.", Icon: Droplets },
+  { name: "Anti-Bacterial Tank", desc: "Plastic coating prevents fungal growth.", Icon: Shield },
+  { name: "DBB Motor", desc: "Heavy Duty Double Ball Bearing with Heat Sink.", Icon: Settings }
 ];
+
 // --- NAVBAR ---
 
-const Navbar = ({ onScreenChange, activeScreen }: any) => {
+interface NavbarProps {
+  onScreenChange: (screen: Screen) => void;
+  activeScreen: Screen;
+}
+
+const Navbar = ({ onScreenChange, activeScreen }: NavbarProps) => {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const navLinks: { label: string; screen: Screen }[] = [
+    { label: 'Home', screen: 'home' },
+    { label: 'Catalogue', screen: 'product-list' },
+    { label: 'Enquire', screen: 'enquiry' },
+  ];
+
+  const navigate = (screen: Screen) => {
+    onScreenChange(screen);
+    setMenuOpen(false);
+  };
+
   return (
-    <nav className="fixed top-0 w-full z-50 bg-black/70 backdrop-blur">
-      <div className="max-w-7xl mx-auto flex justify-between p-4">
-        <div onClick={() => onScreenChange('home')} className="font-bold text-orange-500 cursor-pointer">
+    <nav className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur border-b border-white/10">
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
+        <div
+          onClick={() => navigate('home')}
+          className="font-black text-xl text-orange-500 cursor-pointer tracking-widest"
+        >
           TASHU
         </div>
-        <div className="hidden md:flex gap-6">
-          <button onClick={() => onScreenChange('product-list')}>Catalogue</button>
-          <button onClick={() => onScreenChange('enquiry')}>Enquire</button>
+
+        {/* Desktop links — uses activeScreen to highlight current page */}
+        <div className="hidden md:flex gap-8">
+          {navLinks.map(({ label, screen }) => (
+            <button
+              key={screen}
+              onClick={() => navigate(screen)}
+              className={`text-sm font-medium transition-colors ${
+                activeScreen === screen
+                  ? 'text-orange-500'
+                  : 'text-gray-300 hover:text-white'
+              }`}
+            >
+              {label}
+            </button>
+          ))}
         </div>
+
+        {/* Mobile hamburger */}
+        <button className="md:hidden text-white" onClick={() => setMenuOpen(o => !o)}>
+          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
       </div>
+
+      {/* Mobile dropdown */}
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            key="mobile-menu"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-black/95 border-t border-white/10 overflow-hidden"
+          >
+            {navLinks.map(({ label, screen }) => (
+              <button
+                key={screen}
+                onClick={() => navigate(screen)}
+                className={`block w-full text-left px-6 py-4 text-sm font-medium border-b border-white/5 ${
+                  activeScreen === screen ? 'text-orange-500' : 'text-gray-300'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };
 
-// --- ENQUIRY (SUPABASE FIXED) ---
+// --- HOME SCREEN ---
 
-const EnquirySection = ({ initialProduct = '', onBackHome }: any) => {
+interface HomeScreenProps {
+  onScreenChange: (screen: Screen) => void;
+  onSeriesSelect: (series: string) => void;
+}
+
+const HomeScreen = ({ onScreenChange, onSeriesSelect }: HomeScreenProps) => (
+  <div className="pt-20">
+    {/* Hero */}
+    <section className="min-h-[80vh] flex flex-col items-center justify-center text-center px-6 bg-gradient-to-b from-black via-gray-900 to-black">
+      <motion.h1
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="text-5xl md:text-7xl font-black tracking-tight mb-4"
+      >
+        TASHU <span className="text-orange-500">COOLERS</span>
+      </motion.h1>
+      <motion.p
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.15 }}
+        className="text-gray-400 text-lg md:text-xl max-w-xl mb-8"
+      >
+        India's trusted air coolers — engineered for power, built for durability.
+      </motion.p>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.3 }}
+        className="flex gap-4 flex-wrap justify-center"
+      >
+        <button
+          onClick={() => onScreenChange('product-list')}
+          className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded font-semibold transition-colors"
+        >
+          View Catalogue
+        </button>
+        <button
+          onClick={() => onScreenChange('enquiry')}
+          className="border border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white px-8 py-3 rounded font-semibold transition-colors"
+        >
+          Enquire Now
+        </button>
+      </motion.div>
+    </section>
+
+    {/* Series grid */}
+    <section className="max-w-7xl mx-auto px-6 py-16">
+      <h2 className="text-3xl font-bold mb-2">Our Series</h2>
+      <p className="text-gray-400 mb-8">Find the right cooler for your space.</p>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {PRODUCT_SERIES.map(s => (
+          <button
+            key={s.id}
+            onClick={() => { onSeriesSelect(s.id); onScreenChange('product-list'); }}
+            className="text-left border border-gray-700 rounded-lg p-5 hover:border-orange-500 transition-colors group"
+          >
+            <div className="font-bold text-lg mb-1 group-hover:text-orange-500 transition-colors">{s.name}</div>
+            <p className="text-sm text-gray-400 mb-3">{s.desc}</p>
+            <div className="flex items-center gap-1 text-orange-500 text-sm">
+              View products <ChevronRight size={14} />
+            </div>
+          </button>
+        ))}
+      </div>
+    </section>
+
+    {/* Features grid */}
+    <section className="bg-gray-900/50 py-16">
+      <div className="max-w-7xl mx-auto px-6">
+        <h2 className="text-3xl font-bold mb-2">Standard Features</h2>
+        <p className="text-gray-400 mb-8">Every Tashu cooler comes packed with these.</p>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {COMMON_FEATURES.map(({ name, desc, Icon }) => (
+            <div key={name} className="border border-gray-700 rounded-lg p-4">
+              <Icon size={24} className="text-orange-500 mb-2" />
+              <div className="font-semibold text-sm mb-1">{name}</div>
+              <p className="text-xs text-gray-400">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  </div>
+);
+
+// --- PRODUCT LIST ---
+
+interface ProductListProps {
+  onProductSelect: (p: Product) => void;
+  activeSeries: string | null;
+  onSeriesChange: (s: string | null) => void;
+}
+
+const ProductList = ({ onProductSelect, activeSeries, onSeriesChange }: ProductListProps) => {
+  const filtered = activeSeries
+    ? PRODUCTS.filter(p => p.series === activeSeries)
+    : PRODUCTS;
+
+  return (
+    <div className="pt-24 max-w-7xl mx-auto px-6 pb-16">
+      <h2 className="text-3xl font-bold mb-6">Catalogue</h2>
+
+      {/* Series filter tabs */}
+      <div className="flex flex-wrap gap-2 mb-8">
+        <button
+          onClick={() => onSeriesChange(null)}
+          className={`px-4 py-2 rounded text-sm font-medium border transition-colors ${
+            !activeSeries
+              ? 'bg-orange-500 border-orange-500 text-white'
+              : 'border-gray-600 text-gray-300 hover:border-orange-500'
+          }`}
+        >
+          All
+        </button>
+        {PRODUCT_SERIES.map(s => (
+          <button
+            key={s.id}
+            onClick={() => onSeriesChange(s.id)}
+            className={`px-4 py-2 rounded text-sm font-medium border transition-colors ${
+              activeSeries === s.id
+                ? 'bg-orange-500 border-orange-500 text-white'
+                : 'border-gray-600 text-gray-300 hover:border-orange-500'
+            }`}
+          >
+            {s.name}
+          </button>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {filtered.map(p => (
+          <div
+            key={p.id}
+            onClick={() => onProductSelect(p)}
+            className="border border-gray-700 rounded-lg p-5 cursor-pointer hover:border-orange-500 transition-colors"
+          >
+            <div className="text-xs text-orange-500 font-medium mb-1">{p.series}</div>
+            <h3 className="font-bold text-lg mb-1">{p.name}</h3>
+            <p className="text-sm text-gray-400 mb-3">{p.tagline}</p>
+            <div className="flex justify-between text-xs text-gray-500">
+              <span>{p.specs.airFlow}</span>
+              <span>{p.specs.tankCapacity}</span>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// --- PRODUCT DETAIL ---
+
+interface ProductDetailProps {
+  product: Product | null;
+  onBack: () => void;
+  onEnquire: () => void;
+}
+
+const ProductDetail = ({ product, onBack, onEnquire }: ProductDetailProps) => {
+  if (!product) {
+    return (
+      <div className="pt-32 text-center text-gray-400">
+        <p>No product selected.</p>
+        <button onClick={onBack} className="mt-4 text-orange-500 underline">
+          Back to Catalogue
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="pt-24 px-6 pb-16 max-w-2xl mx-auto">
+      <button
+        onClick={onBack}
+        className="flex items-center gap-2 mb-6 text-orange-500 hover:text-orange-400 transition-colors"
+      >
+        <ArrowLeft size={18} /> Back to Catalogue
+      </button>
+      <div className="text-xs text-orange-500 font-medium mb-1">{product.series}</div>
+      <h2 className="text-3xl font-bold mb-1">{product.name}</h2>
+      <p className="text-orange-400 mb-2">{product.tagline}</p>
+      <p className="text-gray-300 mb-8">{product.desc}</p>
+
+      <h3 className="font-semibold text-lg mb-3">Specifications</h3>
+      <div className="grid grid-cols-2 gap-3 mb-8">
+        {Object.entries(product.specs).map(([key, val]) => (
+          <div key={key} className="border border-gray-700 rounded-lg p-3">
+            <div className="text-xs text-gray-400 capitalize mb-1">
+              {key.replace(/([A-Z])/g, ' $1')}
+            </div>
+            <div className="font-semibold text-sm">{val}</div>
+          </div>
+        ))}
+      </div>
+
+      {product.features && (
+        <div className="mb-8">
+          <h3 className="font-semibold text-lg mb-3">Key Features</h3>
+          <ul className="flex flex-col gap-2">
+            {product.features.map(f => (
+              <li key={f} className="flex items-center gap-2 text-sm text-gray-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-orange-500 flex-shrink-0" />
+                {f}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {product.bestFor && (
+        <div className="mb-8">
+          <h3 className="font-semibold text-lg mb-3">Best For</h3>
+          <div className="flex flex-wrap gap-2">
+            {product.bestFor.map(b => (
+              <span key={b} className="bg-gray-800 text-sm px-3 py-1 rounded-full">{b}</span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <button
+        onClick={onEnquire}
+        className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded font-semibold transition-colors"
+      >
+        Enquire About This Product
+      </button>
+    </div>
+  );
+};
+
+// --- ENQUIRY ---
+
+interface EnquirySectionProps {
+  initialProduct?: string;
+  onBackHome: () => void;
+}
+
+const EnquirySection = ({ initialProduct = '', onBackHome }: EnquirySectionProps) => {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -431,14 +751,10 @@ const EnquirySection = ({ initialProduct = '', onBackHome }: any) => {
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
-
-  console.log("Submitting form...");
-
-  const { data, error } = await supabase
-    .from("enquiries")
-    .insert([
-      {
+    e.preventDefault();
+    const { error } = await supabase
+      .from("enquiries")
+      .insert([{
         full_name: formData.name,
         mobile: formData.phone,
         enquiry_type: formData.enquiryType,
@@ -446,126 +762,94 @@ const EnquirySection = ({ initialProduct = '', onBackHome }: any) => {
         city: formData.city,
         state: formData.state,
         message: formData.message,
-      },
-    ])
-    .select();
+      }]);
 
-  console.log("DATA:", data);
-  console.log("ERROR:", error);
+    if (error) {
+      alert("Submission failed. Please try again.");
+    } else {
+      setSubmitted(true);
+    }
+  };
 
-  if (error) {
-    alert("Submission Failed");
-    console.error(error);
-  } else {
-    alert("Enquiry Submitted Successfully");
-    setSubmitted(true);
+  if (submitted) {
+    return (
+      <div className="min-h-screen pt-24 flex flex-col items-center justify-center text-center px-6">
+        <CheckCircle2 size={64} className="text-orange-500 mb-4" />
+        <h2 className="text-2xl font-bold mb-2">Enquiry Submitted!</h2>
+        <p className="text-gray-400 mb-6">We'll get back to you shortly.</p>
+        <button
+          onClick={onBackHome}
+          className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded font-semibold transition-colors"
+        >
+          Back to Home
+        </button>
+      </div>
+    );
   }
-};
-return (
-    <div className="min-h-screen pt-24 px-6">
-      {submitted ? (
-        <div className="text-center">
-          <CheckCircle2 className="mx-auto mb-4" />
-          <h2>Submitted</h2>
-          <button onClick={onBackHome}>Home</button>
-        </div>
-      ) : (
-        <form onSubmit={handleSubmit} className="max-w-md mx-auto flex flex-col gap-4">
 
-  <input
-    placeholder="Full Name"
-    required
-    value={formData.name}
-    onChange={e =>
-      setFormData({ ...formData, name: e.target.value })
-    }
-    className="p-3 text-black rounded"
-  />
-
-  <input
-    placeholder="Mobile Number"
-    required
-    value={formData.phone}
-    onChange={e =>
-      setFormData({ ...formData, phone: e.target.value })
-    }
-    className="p-3 text-black rounded"
-  />
-
-  {/* ENQUIRY TYPE */}
-  <select
-    value={formData.enquiryType}
-    onChange={e =>
-      setFormData({
-        ...formData,
-        enquiryType: e.target.value
-      })
-    }
-    className="p-3 text-black rounded"
-  >
-    <option value="Dealer">Dealer</option>
-    <option value="Distributor">Distributor</option>
-    <option value="Wholesaler">Wholesaler</option>
-  </select>
-
-  {/* PRODUCT */}
-  <input
-    placeholder="Interested Product"
-    value={formData.product}
-    onChange={e =>
-      setFormData({
-        ...formData,
-        product: e.target.value
-      })
-    }
-    className="p-3 text-black rounded"
-  />
-
-  {/* CITY */}
-  <input
-    placeholder="City"
-    required
-    value={formData.city}
-    onChange={e =>
-      setFormData({ ...formData, city: e.target.value })
-    }
-    className="p-3 text-black rounded"
-  />
-
-  {/* STATE */}
-  <input
-    placeholder="State"
-    value={formData.state}
-    onChange={e =>
-      setFormData({
-        ...formData,
-        state: e.target.value
-      })
-    }
-    className="p-3 text-black rounded"
-  />
-
-  {/* MESSAGE */}
-  <textarea
-    placeholder="Message"
-    value={formData.message}
-    onChange={e =>
-      setFormData({
-        ...formData,
-        message: e.target.value
-      })
-    }
-    className="p-3 text-black rounded"
-  />
-
-  <button
-    type="submit"
-    className="bg-orange-500 text-white p-3 rounded"
-  >
-    Submit
-  </button>
-</form>
-      )}
+  return (
+    <div className="min-h-screen pt-24 px-6 pb-16">
+      <div className="max-w-md mx-auto">
+        <h2 className="text-3xl font-bold mb-2">Enquire</h2>
+        <p className="text-gray-400 mb-8">Fill in your details and we'll reach out.</p>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <input
+            placeholder="Full Name"
+            required
+            value={formData.name}
+            onChange={e => setFormData({ ...formData, name: e.target.value })}
+            className="p-3 text-black rounded"
+          />
+          <input
+            placeholder="Mobile Number"
+            required
+            value={formData.phone}
+            onChange={e => setFormData({ ...formData, phone: e.target.value })}
+            className="p-3 text-black rounded"
+          />
+          <select
+            value={formData.enquiryType}
+            onChange={e => setFormData({ ...formData, enquiryType: e.target.value })}
+            className="p-3 text-black rounded"
+          >
+            <option value="Dealer">Dealer</option>
+            <option value="Distributor">Distributor</option>
+            <option value="Wholesaler">Wholesaler</option>
+          </select>
+          <input
+            placeholder="Interested Product"
+            value={formData.product}
+            onChange={e => setFormData({ ...formData, product: e.target.value })}
+            className="p-3 text-black rounded"
+          />
+          <input
+            placeholder="City"
+            required
+            value={formData.city}
+            onChange={e => setFormData({ ...formData, city: e.target.value })}
+            className="p-3 text-black rounded"
+          />
+          <input
+            placeholder="State"
+            value={formData.state}
+            onChange={e => setFormData({ ...formData, state: e.target.value })}
+            className="p-3 text-black rounded"
+          />
+          <textarea
+            placeholder="Message (optional)"
+            rows={4}
+            value={formData.message}
+            onChange={e => setFormData({ ...formData, message: e.target.value })}
+            className="p-3 text-black rounded"
+          />
+          <button
+            type="submit"
+            className="bg-orange-500 hover:bg-orange-600 text-white p-3 rounded font-semibold transition-colors"
+          >
+            Submit Enquiry
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
@@ -575,62 +859,52 @@ return (
 export default function App() {
   const [activeScreen, setActiveScreen] = useState<Screen>('home');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [activeSeries, setActiveSeries] = useState<string | null>(null);
+
+  const handleProductSelect = (p: Product) => {
+    setSelectedProduct(p);
+    setActiveScreen('product-detail');
+  };
 
   return (
     <div className="bg-black text-white min-h-screen">
-
       <Navbar onScreenChange={setActiveScreen} activeScreen={activeScreen} />
 
       <AnimatePresence mode="wait">
         {activeScreen === 'home' && (
-          <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="p-10">
-            <h1>TASHU COOLERS</h1>
+          <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <HomeScreen
+              onScreenChange={setActiveScreen}
+              onSeriesSelect={s => { setActiveSeries(s); }}
+            />
           </motion.div>
         )}
 
         {activeScreen === 'product-list' && (
-          <motion.div key="product-list" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="p-10">
-            {PRODUCTS.map(p => (
-              <div key={p.id} onClick={() => {
-                setSelectedProduct(p);
-                setActiveScreen('product-detail');
-              }} className="border p-4 mb-4 cursor-pointer">
-                <h3>{p.name}</h3>
-                <p className="text-sm text-gray-400">{p.series} — {p.tagline}</p>
-              </div>
-            ))}
+          <motion.div key="product-list" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <ProductList
+              onProductSelect={handleProductSelect}
+              activeSeries={activeSeries}
+              onSeriesChange={setActiveSeries}
+            />
           </motion.div>
         )}
 
-        {activeScreen === 'product-detail' && selectedProduct && (
-          <motion.div key="product-detail" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="pt-24 p-10 max-w-2xl mx-auto">
-            <button onClick={() => setActiveScreen('product-list')} className="flex items-center gap-2 mb-6 text-orange-500">
-              <ArrowLeft size={18} /> Back to Catalogue
-            </button>
-            <h2 className="text-2xl font-bold mb-1">{selectedProduct.name}</h2>
-            <p className="text-orange-400 mb-2">{selectedProduct.tagline}</p>
-            <p className="text-gray-300 mb-6">{selectedProduct.desc}</p>
-            <div className="grid grid-cols-2 gap-3 mb-6">
-              {Object.entries(selectedProduct.specs).map(([key, val]) => (
-                <div key={key} className="border border-gray-700 rounded p-3">
-                  <div className="text-xs text-gray-400 capitalize">{key.replace(/([A-Z])/g, ' $1')}</div>
-                  <div className="font-semibold">{val}</div>
-                </div>
-              ))}
-            </div>
-            <button
-              onClick={() => setActiveScreen('enquiry')}
-              className="bg-orange-500 text-white px-6 py-3 rounded"
-            >
-              Enquire About This Product
-            </button>
+        {activeScreen === 'product-detail' && (
+          <motion.div key="product-detail" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+            <ProductDetail
+              product={selectedProduct}
+              onBack={() => setActiveScreen('product-list')}
+              onEnquire={() => setActiveScreen('enquiry')}
+            />
           </motion.div>
         )}
 
         {activeScreen === 'enquiry' && (
-          <motion.div key="enquiry" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          // key includes product id so EnquirySection remounts fresh when product changes
+          <motion.div key={`enquiry-${selectedProduct?.id ?? 'none'}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             <EnquirySection
-              initialProduct={selectedProduct?.name || ''}
+              initialProduct={selectedProduct?.name ?? ''}
               onBackHome={() => setActiveScreen('home')}
             />
           </motion.div>
