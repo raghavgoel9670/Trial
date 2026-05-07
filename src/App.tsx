@@ -798,19 +798,19 @@ const EnquirySection = ({ initialProduct = '', onBackHome }: EnquirySectionProps
             required
             value={formData.name}
             onChange={e => setFormData({ ...formData, name: e.target.value })}
-            className="p-3 text-black rounded"
+            className="p-3 bg-white text-black rounded"
           />
           <input
             placeholder="Mobile Number"
             required
             value={formData.phone}
             onChange={e => setFormData({ ...formData, phone: e.target.value })}
-            className="p-3 text-black rounded"
+            className="p-3 bg-white text-black rounded"
           />
           <select
             value={formData.enquiryType}
             onChange={e => setFormData({ ...formData, enquiryType: e.target.value })}
-            className="p-3 text-black rounded"
+            className="p-3 bg-white text-black rounded"
           >
             <option value="Dealer">Dealer</option>
             <option value="Distributor">Distributor</option>
@@ -820,27 +820,27 @@ const EnquirySection = ({ initialProduct = '', onBackHome }: EnquirySectionProps
             placeholder="Interested Product"
             value={formData.product}
             onChange={e => setFormData({ ...formData, product: e.target.value })}
-            className="p-3 text-black rounded"
+            className="p-3 bg-white text-black rounded"
           />
           <input
             placeholder="City"
             required
             value={formData.city}
             onChange={e => setFormData({ ...formData, city: e.target.value })}
-            className="p-3 text-black rounded"
+            className="p-3 bg-white text-black rounded"
           />
           <input
             placeholder="State"
             value={formData.state}
             onChange={e => setFormData({ ...formData, state: e.target.value })}
-            className="p-3 text-black rounded"
+            className="p-3 bg-white text-black rounded"
           />
           <textarea
             placeholder="Message (optional)"
             rows={4}
             value={formData.message}
             onChange={e => setFormData({ ...formData, message: e.target.value })}
-            className="p-3 text-black rounded"
+            className="p-3 bg-white text-black rounded"
           />
           <button
             type="submit"
