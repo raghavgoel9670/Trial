@@ -13,7 +13,10 @@ import {
   ArrowLeft,
   Menu,
   X,
-  ChevronRight
+  ChevronRight,
+  Zap,
+  Factory,
+  Phone
 } from 'lucide-react';
 
 // --- Types ---
@@ -57,7 +60,6 @@ interface FeatureDef {
 
 // --- Data ---
 
-// Series IDs match the `series` field on each Product exactly
 const PRODUCT_SERIES: SeriesItem[] = [
   { id: 'Rhino', name: 'RHINO Series', desc: 'Heavy-duty cooling for large spaces and commercial use.' },
   { id: 'Terminator', name: 'Terminator Series', desc: 'Powerful airflow with rugged design and high performance.' },
@@ -404,7 +406,6 @@ const PRODUCTS: Product[] = [
   }
 ];
 
-// Icons stored as component references, not JSX instances
 const COMMON_FEATURES: FeatureDef[] = [
   { name: "Auto Tank Fill", desc: "Float Valve Technology for non-stop performance.", Icon: Droplets },
   { name: "Auto Drain", desc: "Motorised water drainage system.", Icon: Trash2 },
@@ -438,39 +439,43 @@ const Navbar = ({ onScreenChange, activeScreen }: NavbarProps) => {
   };
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur border-b border-white/10">
+    <nav className="fixed top-0 w-full z-50 glass border-b border-white/10">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
         <div
           onClick={() => navigate('home')}
-          className="font-black text-xl text-orange-500 cursor-pointer tracking-widest"
+          className="font-black text-xl tracking-widest cursor-pointer"
         >
-          TASHU
+          <span className="gradient-text">TASHU</span>
+          <span className="text-orange-500 ml-1">●</span>
         </div>
 
-        {/* Desktop links — uses activeScreen to highlight current page */}
-        <div className="hidden md:flex gap-8">
+        <div className="hidden md:flex items-center gap-8">
           {navLinks.map(({ label, screen }) => (
             <button
               key={screen}
               onClick={() => navigate(screen)}
-              className={`text-sm font-medium transition-colors ${
+              className={`text-sm font-semibold tracking-wide transition-colors ${
                 activeScreen === screen
                   ? 'text-orange-500'
-                  : 'text-gray-300 hover:text-white'
+                  : 'text-gray-400 hover:text-white'
               }`}
             >
               {label}
             </button>
           ))}
+          <button
+            onClick={() => navigate('enquiry')}
+            className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-4 py-2 rounded-full transition-colors accent-glow"
+          >
+            Get Quote
+          </button>
         </div>
 
-        {/* Mobile hamburger */}
         <button className="md:hidden text-white" onClick={() => setMenuOpen(o => !o)}>
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+          {menuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
-      {/* Mobile dropdown */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -478,14 +483,14 @@ const Navbar = ({ onScreenChange, activeScreen }: NavbarProps) => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-black/95 border-t border-white/10 overflow-hidden"
+            className="md:hidden glass border-t border-white/10 overflow-hidden"
           >
             {navLinks.map(({ label, screen }) => (
               <button
                 key={screen}
                 onClick={() => navigate(screen)}
-                className={`block w-full text-left px-6 py-4 text-sm font-medium border-b border-white/5 ${
-                  activeScreen === screen ? 'text-orange-500' : 'text-gray-300'
+                className={`block w-full text-left px-6 py-4 text-sm font-semibold border-b border-white/5 transition-colors ${
+                  activeScreen === screen ? 'text-orange-500' : 'text-gray-300 hover:text-white'
                 }`}
               >
                 {label}
@@ -508,80 +513,172 @@ interface HomeScreenProps {
 const HomeScreen = ({ onScreenChange, onSeriesSelect }: HomeScreenProps) => (
   <div className="pt-20">
     {/* Hero */}
-    <section className="min-h-[80vh] flex flex-col items-center justify-center text-center px-6 bg-gradient-to-b from-black via-gray-900 to-black">
-      <motion.h1
-        initial={{ opacity: 0, y: 30 }}
+    <section className="relative min-h-[90vh] flex flex-col items-center justify-center text-center px-6 overflow-hidden">
+      <div className="airflow-visual absolute inset-0 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black pointer-events-none" />
+
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-5xl md:text-7xl font-black tracking-tight mb-4"
+        transition={{ duration: 0.4 }}
+        className="relative z-10 inline-flex items-center gap-2 glass px-4 py-2 rounded-full text-xs font-semibold text-orange-400 mb-6 tracking-widest uppercase"
       >
-        TASHU <span className="text-orange-500">COOLERS</span>
-      </motion.h1>
-      <motion.p
+        <Zap size={12} /> India's Most Trusted Air Coolers
+      </motion.div>
+
+      <motion.h1
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.15 }}
-        className="text-gray-400 text-lg md:text-xl max-w-xl mb-8"
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="relative z-10 text-6xl md:text-8xl font-black tracking-tight mb-4 leading-none"
       >
-        India's trusted air coolers — engineered for power, built for durability.
+        <span className="gradient-text">TASHU</span>
+        <br />
+        <span className="text-orange-500">COOLERS</span>
+      </motion.h1>
+
+      <motion.p
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="relative z-10 text-gray-400 text-lg md:text-xl max-w-lg mb-10 leading-relaxed"
+      >
+        Engineered for power. Built for durability. Trusted across India.
       </motion.p>
+
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.3 }}
-        className="flex gap-4 flex-wrap justify-center"
+        transition={{ delay: 0.35 }}
+        className="relative z-10 flex gap-4 flex-wrap justify-center"
       >
         <button
           onClick={() => onScreenChange('product-list')}
-          className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded font-semibold transition-colors"
+          className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3.5 rounded-full font-bold tracking-wide transition-all accent-glow hover:scale-105"
         >
           View Catalogue
         </button>
         <button
           onClick={() => onScreenChange('enquiry')}
-          className="border border-orange-500 text-orange-500 hover:bg-orange-500 hover:text-white px-8 py-3 rounded font-semibold transition-colors"
+          className="glass border border-orange-500/40 text-orange-400 hover:text-white hover:border-orange-500 px-8 py-3.5 rounded-full font-bold tracking-wide transition-all"
         >
           Enquire Now
         </button>
       </motion.div>
+
+      {/* Stats bar */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.5 }}
+        className="relative z-10 mt-16 grid grid-cols-3 gap-6 md:gap-16"
+      >
+        {[
+          { val: '6+', label: 'Product Series' },
+          { val: '18+', label: 'Models' },
+          { val: '8', label: 'Standard Features' },
+        ].map(({ val, label }) => (
+          <div key={label} className="text-center">
+            <div className="text-3xl font-black text-orange-500">{val}</div>
+            <div className="text-xs text-gray-500 mt-1 uppercase tracking-widest">{label}</div>
+          </div>
+        ))}
+      </motion.div>
     </section>
 
     {/* Series grid */}
-    <section className="max-w-7xl mx-auto px-6 py-16">
-      <h2 className="text-3xl font-bold mb-2">Our Series</h2>
-      <p className="text-gray-400 mb-8">Find the right cooler for your space.</p>
+    <section className="max-w-7xl mx-auto px-6 py-20">
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.4 }}
+      >
+        <div className="text-xs text-orange-500 font-bold tracking-widest uppercase mb-2">Our Lineup</div>
+        <h2 className="text-4xl font-black mb-2 gradient-text">Product Series</h2>
+        <p className="text-gray-500 mb-10">Choose the series that fits your space and need.</p>
+      </motion.div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {PRODUCT_SERIES.map(s => (
-          <button
+        {PRODUCT_SERIES.map((s, i) => (
+          <motion.button
             key={s.id}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.05 }}
             onClick={() => { onSeriesSelect(s.id); onScreenChange('product-list'); }}
-            className="text-left border border-gray-700 rounded-lg p-5 hover:border-orange-500 transition-colors group"
+            className="product-card text-left glass-light border border-white/10 rounded-xl p-6 transition-all group cursor-pointer"
           >
-            <div className="font-bold text-lg mb-1 group-hover:text-orange-500 transition-colors">{s.name}</div>
-            <p className="text-sm text-gray-400 mb-3">{s.desc}</p>
-            <div className="flex items-center gap-1 text-orange-500 text-sm">
-              View products <ChevronRight size={14} />
+            <div className="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center mb-4">
+              <Wind size={20} className="text-orange-500" />
             </div>
-          </button>
+            <div className="font-bold text-lg mb-1 group-hover:text-orange-500 transition-colors">{s.name}</div>
+            <p className="text-sm text-gray-500 mb-4 leading-relaxed">{s.desc}</p>
+            <div className="flex items-center gap-1 text-orange-500 text-sm font-semibold">
+              Explore <ChevronRight size={14} />
+            </div>
+          </motion.button>
         ))}
       </div>
     </section>
 
-    {/* Features grid */}
-    <section className="bg-gray-900/50 py-16">
-      <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-3xl font-bold mb-2">Standard Features</h2>
-        <p className="text-gray-400 mb-8">Every Tashu cooler comes packed with these.</p>
+    {/* Features */}
+    <section className="py-20 relative overflow-hidden">
+      <div className="airflow-visual absolute inset-0 pointer-events-none opacity-50" />
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <div className="text-xs text-orange-500 font-bold tracking-widest uppercase mb-2">Built In</div>
+          <h2 className="text-4xl font-black mb-2 gradient-text">Standard Features</h2>
+          <p className="text-gray-500 mb-10">Every Tashu cooler ships with all of these.</p>
+        </motion.div>
+
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {COMMON_FEATURES.map(({ name, desc, Icon }) => (
-            <div key={name} className="border border-gray-700 rounded-lg p-4">
-              <Icon size={24} className="text-orange-500 mb-2" />
-              <div className="font-semibold text-sm mb-1">{name}</div>
-              <p className="text-xs text-gray-400">{desc}</p>
-            </div>
+          {COMMON_FEATURES.map(({ name, desc, Icon }, i) => (
+            <motion.div
+              key={name}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.05 }}
+              className="glass-light border border-white/10 rounded-xl p-5 hover:border-orange-500/30 transition-colors"
+            >
+              <div className="w-9 h-9 rounded-lg bg-orange-500/10 flex items-center justify-center mb-3">
+                <Icon size={18} className="text-orange-500" />
+              </div>
+              <div className="font-bold text-sm mb-1">{name}</div>
+              <p className="text-xs text-gray-500 leading-relaxed">{desc}</p>
+            </motion.div>
           ))}
         </div>
       </div>
+    </section>
+
+    {/* CTA Banner */}
+    <section className="max-w-7xl mx-auto px-6 pb-20">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="glass border border-orange-500/20 rounded-2xl p-10 text-center accent-glow"
+      >
+        <Factory size={36} className="text-orange-500 mx-auto mb-4" />
+        <h3 className="text-3xl font-black mb-2 gradient-text">Become a Dealer or Distributor</h3>
+        <p className="text-gray-400 mb-6 max-w-md mx-auto">
+          Join the Tashu network. Grow your business with India's trusted cooler brand.
+        </p>
+        <button
+          onClick={() => onScreenChange('enquiry')}
+          className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-full font-bold transition-all hover:scale-105"
+        >
+          <Phone size={14} className="inline mr-2" />
+          Enquire Now
+        </button>
+      </motion.div>
     </section>
   </div>
 );
@@ -600,17 +697,18 @@ const ProductList = ({ onProductSelect, activeSeries, onSeriesChange }: ProductL
     : PRODUCTS;
 
   return (
-    <div className="pt-24 max-w-7xl mx-auto px-6 pb-16">
-      <h2 className="text-3xl font-bold mb-6">Catalogue</h2>
+    <div className="pt-28 max-w-7xl mx-auto px-6 pb-20">
+      <div className="text-xs text-orange-500 font-bold tracking-widest uppercase mb-2">All Models</div>
+      <h2 className="text-4xl font-black mb-8 gradient-text">Catalogue</h2>
 
-      {/* Series filter tabs */}
-      <div className="flex flex-wrap gap-2 mb-8">
+      {/* Filter tabs */}
+      <div className="flex flex-wrap gap-2 mb-10">
         <button
           onClick={() => onSeriesChange(null)}
-          className={`px-4 py-2 rounded text-sm font-medium border transition-colors ${
+          className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all ${
             !activeSeries
-              ? 'bg-orange-500 border-orange-500 text-white'
-              : 'border-gray-600 text-gray-300 hover:border-orange-500'
+              ? 'bg-orange-500 border-orange-500 text-white accent-glow'
+              : 'glass-light border-white/10 text-gray-400 hover:border-orange-500/50 hover:text-white'
           }`}
         >
           All
@@ -619,10 +717,10 @@ const ProductList = ({ onProductSelect, activeSeries, onSeriesChange }: ProductL
           <button
             key={s.id}
             onClick={() => onSeriesChange(s.id)}
-            className={`px-4 py-2 rounded text-sm font-medium border transition-colors ${
+            className={`px-4 py-2 rounded-full text-sm font-semibold border transition-all ${
               activeSeries === s.id
-                ? 'bg-orange-500 border-orange-500 text-white'
-                : 'border-gray-600 text-gray-300 hover:border-orange-500'
+                ? 'bg-orange-500 border-orange-500 text-white accent-glow'
+                : 'glass-light border-white/10 text-gray-400 hover:border-orange-500/50 hover:text-white'
             }`}
           >
             {s.name}
@@ -631,20 +729,32 @@ const ProductList = ({ onProductSelect, activeSeries, onSeriesChange }: ProductL
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filtered.map(p => (
-          <div
+        {filtered.map((p, i) => (
+          <motion.div
             key={p.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.04 }}
             onClick={() => onProductSelect(p)}
-            className="border border-gray-700 rounded-lg p-5 cursor-pointer hover:border-orange-500 transition-colors"
+            className="product-card glass-light border border-white/10 rounded-xl p-6 cursor-pointer transition-all"
           >
-            <div className="text-xs text-orange-500 font-medium mb-1">{p.series}</div>
-            <h3 className="font-bold text-lg mb-1">{p.name}</h3>
-            <p className="text-sm text-gray-400 mb-3">{p.tagline}</p>
-            <div className="flex justify-between text-xs text-gray-500">
-              <span>{p.specs.airFlow}</span>
-              <span>{p.specs.tankCapacity}</span>
+            <div className="text-xs text-orange-500 font-bold tracking-widest uppercase mb-2">{p.series}</div>
+            <h3 className="font-black text-xl mb-1">{p.name}</h3>
+            <p className="text-sm text-gray-500 mb-5">{p.tagline}</p>
+            <div className="grid grid-cols-2 gap-2 mb-4">
+              <div className="glass rounded-lg p-2.5">
+                <div className="text-xs text-gray-500 mb-0.5">Air Flow</div>
+                <div className="text-xs font-bold text-white">{p.specs.airFlow}</div>
+              </div>
+              <div className="glass rounded-lg p-2.5">
+                <div className="text-xs text-gray-500 mb-0.5">Tank</div>
+                <div className="text-xs font-bold text-white">{p.specs.tankCapacity}</div>
+              </div>
             </div>
-          </div>
+            <div className="flex items-center gap-1 text-orange-500 text-sm font-semibold">
+              View Details <ChevronRight size={14} />
+            </div>
+          </motion.div>
         ))}
       </div>
     </div>
@@ -672,37 +782,42 @@ const ProductDetail = ({ product, onBack, onEnquire }: ProductDetailProps) => {
   }
 
   return (
-    <div className="pt-24 px-6 pb-16 max-w-2xl mx-auto">
+    <div className="pt-28 px-6 pb-20 max-w-2xl mx-auto">
       <button
         onClick={onBack}
-        className="flex items-center gap-2 mb-6 text-orange-500 hover:text-orange-400 transition-colors"
+        className="flex items-center gap-2 mb-8 text-gray-400 hover:text-orange-500 transition-colors text-sm font-semibold"
       >
-        <ArrowLeft size={18} /> Back to Catalogue
+        <ArrowLeft size={16} /> Back to Catalogue
       </button>
-      <div className="text-xs text-orange-500 font-medium mb-1">{product.series}</div>
-      <h2 className="text-3xl font-bold mb-1">{product.name}</h2>
-      <p className="text-orange-400 mb-2">{product.tagline}</p>
-      <p className="text-gray-300 mb-8">{product.desc}</p>
 
-      <h3 className="font-semibold text-lg mb-3">Specifications</h3>
+      <div className="glass-light border border-white/10 rounded-2xl p-8 mb-6">
+        <div className="text-xs text-orange-500 font-bold tracking-widest uppercase mb-2">{product.series}</div>
+        <h2 className="text-4xl font-black mb-1 gradient-text">{product.name}</h2>
+        <p className="text-orange-400 font-semibold mb-3">{product.tagline}</p>
+        <p className="text-gray-400 leading-relaxed">{product.desc}</p>
+      </div>
+
+      <h3 className="font-black text-lg mb-4 text-gray-300 uppercase tracking-wider">Specifications</h3>
       <div className="grid grid-cols-2 gap-3 mb-8">
         {Object.entries(product.specs).map(([key, val]) => (
-          <div key={key} className="border border-gray-700 rounded-lg p-3">
-            <div className="text-xs text-gray-400 capitalize mb-1">
+          <div key={key} className="glass-light border border-white/10 rounded-xl p-4">
+            <div className="text-xs text-gray-500 capitalize mb-1">
               {key.replace(/([A-Z])/g, ' $1')}
             </div>
-            <div className="font-semibold text-sm">{val}</div>
+            <div className="font-bold text-sm text-white">{val}</div>
           </div>
         ))}
       </div>
 
       {product.features && (
-        <div className="mb-8">
-          <h3 className="font-semibold text-lg mb-3">Key Features</h3>
-          <ul className="flex flex-col gap-2">
+        <div className="glass-light border border-white/10 rounded-2xl p-6 mb-6">
+          <h3 className="font-black text-base mb-4 text-gray-300 uppercase tracking-wider">Key Features</h3>
+          <ul className="flex flex-col gap-3">
             {product.features.map(f => (
-              <li key={f} className="flex items-center gap-2 text-sm text-gray-300">
-                <span className="w-1.5 h-1.5 rounded-full bg-orange-500 flex-shrink-0" />
+              <li key={f} className="flex items-center gap-3 text-sm text-gray-300">
+                <span className="w-5 h-5 rounded-full bg-orange-500/20 flex items-center justify-center flex-shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
+                </span>
                 {f}
               </li>
             ))}
@@ -712,10 +827,12 @@ const ProductDetail = ({ product, onBack, onEnquire }: ProductDetailProps) => {
 
       {product.bestFor && (
         <div className="mb-8">
-          <h3 className="font-semibold text-lg mb-3">Best For</h3>
+          <h3 className="font-black text-base mb-4 text-gray-300 uppercase tracking-wider">Best For</h3>
           <div className="flex flex-wrap gap-2">
             {product.bestFor.map(b => (
-              <span key={b} className="bg-gray-800 text-sm px-3 py-1 rounded-full">{b}</span>
+              <span key={b} className="glass border border-orange-500/20 text-sm px-4 py-1.5 rounded-full text-orange-300 font-semibold">
+                {b}
+              </span>
             ))}
           </div>
         </div>
@@ -723,7 +840,7 @@ const ProductDetail = ({ product, onBack, onEnquire }: ProductDetailProps) => {
 
       <button
         onClick={onEnquire}
-        className="w-full bg-orange-500 hover:bg-orange-600 text-white py-3 rounded font-semibold transition-colors"
+        className="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-xl font-black tracking-wide transition-all accent-glow hover:scale-[1.02]"
       >
         Enquire About This Product
       </button>
@@ -774,77 +891,85 @@ const EnquirySection = ({ initialProduct = '', onBackHome }: EnquirySectionProps
   if (submitted) {
     return (
       <div className="min-h-screen pt-24 flex flex-col items-center justify-center text-center px-6">
-        <CheckCircle2 size={64} className="text-orange-500 mb-4" />
-        <h2 className="text-2xl font-bold mb-2">Enquiry Submitted!</h2>
-        <p className="text-gray-400 mb-6">We'll get back to you shortly.</p>
-        <button
-          onClick={onBackHome}
-          className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded font-semibold transition-colors"
-        >
-          Back to Home
-        </button>
+        <div className="glass-light border border-orange-500/20 rounded-2xl p-12 max-w-md w-full accent-glow">
+          <CheckCircle2 size={56} className="text-orange-500 mx-auto mb-4" />
+          <h2 className="text-2xl font-black mb-2 gradient-text">Enquiry Submitted!</h2>
+          <p className="text-gray-400 mb-8">Our team will reach out to you shortly.</p>
+          <button
+            onClick={onBackHome}
+            className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-full font-bold transition-all"
+          >
+            Back to Home
+          </button>
+        </div>
       </div>
     );
   }
 
+  const inputClass = "w-full p-3.5 bg-white/5 border border-white/10 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-colors text-sm";
+
   return (
-    <div className="min-h-screen pt-24 px-6 pb-16">
+    <div className="min-h-screen pt-24 px-6 pb-20">
       <div className="max-w-md mx-auto">
-        <h2 className="text-3xl font-bold mb-2">Enquire</h2>
-        <p className="text-gray-400 mb-8">Fill in your details and we'll reach out.</p>
+        <div className="text-xs text-orange-500 font-bold tracking-widest uppercase mb-2">Get In Touch</div>
+        <h2 className="text-4xl font-black mb-2 gradient-text">Enquire</h2>
+        <p className="text-gray-500 mb-8">Fill in your details and we'll reach out.</p>
+
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
             placeholder="Full Name"
             required
             value={formData.name}
             onChange={e => setFormData({ ...formData, name: e.target.value })}
-            className="p-3 bg-white text-black rounded"
+            className={inputClass}
           />
           <input
             placeholder="Mobile Number"
             required
             value={formData.phone}
             onChange={e => setFormData({ ...formData, phone: e.target.value })}
-            className="p-3 bg-white text-black rounded"
+            className={inputClass}
           />
           <select
             value={formData.enquiryType}
             onChange={e => setFormData({ ...formData, enquiryType: e.target.value })}
-            className="p-3 bg-white text-black rounded"
+            className={inputClass + " cursor-pointer"}
           >
-            <option value="Dealer">Dealer</option>
-            <option value="Distributor">Distributor</option>
-            <option value="Wholesaler">Wholesaler</option>
+            <option value="Dealer" className="bg-gray-900">Dealer</option>
+            <option value="Distributor" className="bg-gray-900">Distributor</option>
+            <option value="Wholesaler" className="bg-gray-900">Wholesaler</option>
           </select>
           <input
-            placeholder="Interested Product"
+            placeholder="Interested Product (optional)"
             value={formData.product}
             onChange={e => setFormData({ ...formData, product: e.target.value })}
-            className="p-3 bg-white text-black rounded"
+            className={inputClass}
           />
-          <input
-            placeholder="City"
-            required
-            value={formData.city}
-            onChange={e => setFormData({ ...formData, city: e.target.value })}
-            className="p-3 bg-white text-black rounded"
-          />
-          <input
-            placeholder="State"
-            value={formData.state}
-            onChange={e => setFormData({ ...formData, state: e.target.value })}
-            className="p-3 bg-white text-black rounded"
-          />
+          <div className="grid grid-cols-2 gap-4">
+            <input
+              placeholder="City"
+              required
+              value={formData.city}
+              onChange={e => setFormData({ ...formData, city: e.target.value })}
+              className={inputClass}
+            />
+            <input
+              placeholder="State"
+              value={formData.state}
+              onChange={e => setFormData({ ...formData, state: e.target.value })}
+              className={inputClass}
+            />
+          </div>
           <textarea
             placeholder="Message (optional)"
             rows={4}
             value={formData.message}
             onChange={e => setFormData({ ...formData, message: e.target.value })}
-            className="p-3 bg-white text-black rounded"
+            className={inputClass + " resize-none"}
           />
           <button
             type="submit"
-            className="bg-orange-500 hover:bg-orange-600 text-white p-3 rounded font-semibold transition-colors"
+            className="bg-orange-500 hover:bg-orange-600 text-white p-4 rounded-xl font-black tracking-wide transition-all accent-glow hover:scale-[1.02]"
           >
             Submit Enquiry
           </button>
@@ -867,21 +992,21 @@ export default function App() {
   };
 
   return (
-    <div className="bg-black text-white min-h-screen">
+    <div className="bg-brand-dark text-white min-h-screen">
       <Navbar onScreenChange={setActiveScreen} activeScreen={activeScreen} />
 
       <AnimatePresence mode="wait">
         {activeScreen === 'home' && (
-          <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <motion.div key="home" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
             <HomeScreen
               onScreenChange={setActiveScreen}
-              onSeriesSelect={s => { setActiveSeries(s); }}
+              onSeriesSelect={s => setActiveSeries(s)}
             />
           </motion.div>
         )}
 
         {activeScreen === 'product-list' && (
-          <motion.div key="product-list" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <motion.div key="product-list" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
             <ProductList
               onProductSelect={handleProductSelect}
               activeSeries={activeSeries}
@@ -891,7 +1016,7 @@ export default function App() {
         )}
 
         {activeScreen === 'product-detail' && (
-          <motion.div key="product-detail" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <motion.div key="product-detail" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
             <ProductDetail
               product={selectedProduct}
               onBack={() => setActiveScreen('product-list')}
@@ -901,8 +1026,7 @@ export default function App() {
         )}
 
         {activeScreen === 'enquiry' && (
-          // key includes product id so EnquirySection remounts fresh when product changes
-          <motion.div key={`enquiry-${selectedProduct?.id ?? 'none'}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+          <motion.div key={`enquiry-${selectedProduct?.id ?? 'none'}`} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
             <EnquirySection
               initialProduct={selectedProduct?.name ?? ''}
               onBackHome={() => setActiveScreen('home')}
