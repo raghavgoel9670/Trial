@@ -784,7 +784,7 @@ const ProductList = ({ onProductSelect, activeSeries, onSeriesChange }: ProductL
                 src={`${import.meta.env.BASE_URL}${p.image.replace(/^\//, '')}`}
                 alt={p.name}
                 onClick={e => { e.stopPropagation(); setLightbox({ src: `${import.meta.env.BASE_URL}${p.image.replace(/^\//, '')}`, alt: p.name }); }}
-                className="w-full h-full object-cover transition-transform duration-500 hover:scale-105 cursor-zoom-in"
+                className="w-full h-full object-contain transition-transform duration-500 hover:scale-105 cursor-zoom-in"
               />
             </div>
             <div className="p-6">
@@ -849,7 +849,7 @@ const ProductDetail = ({ product, onBack, onEnquire }: ProductDetailProps) => {
             src={`${import.meta.env.BASE_URL}${product.image.replace(/^\//, '')}`}
             alt={product.name}
             onClick={() => setLightbox({ src: `${import.meta.env.BASE_URL}${product.image.replace(/^\//, '')}`, alt: product.name })}
-            className="w-full h-full object-cover cursor-zoom-in"
+            className="w-full h-full object-contain cursor-zoom-in"
           />
         </div>
         <div className="p-8">
