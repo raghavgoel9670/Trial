@@ -77,7 +77,7 @@ const PRODUCTS: Product[] = [
     series: 'Rhino',
     tagline: 'Strong Means Rhino',
     desc: 'The ultimate powerhouse for large commercial spaces, gyms, and banquets.',
-    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    image: 'https://drive.google.com/uc?export=view&id=1KQaNmyc9HsQyZ9AW62pziUix_SaXWpSo',
     specs: {
       airFlow: '11300 m3/h',
       fanSize: '26 Inches',
