@@ -737,8 +737,16 @@ const ProductList = ({ onProductSelect, activeSeries, onSeriesChange }: ProductL
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.04 }}
             onClick={() => onProductSelect(p)}
-            className="product-card glass-light border border-white/10 rounded-xl p-6 cursor-pointer transition-all"
+            className="product-card glass-light border border-white/10 rounded-xl overflow-hidden cursor-pointer transition-all"
           >
+            <div className="w-full h-48 overflow-hidden bg-white/5">
+              <img
+                src={p.image}
+                alt={p.name}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+              />
+            </div>
+            <div className="p-6">
             <div className="text-xs text-orange-500 font-bold tracking-widest uppercase mb-2">{p.series}</div>
             <h3 className="font-black text-xl mb-1">{p.name}</h3>
             <p className="text-sm text-gray-500 mb-5">{p.tagline}</p>
@@ -754,6 +762,7 @@ const ProductList = ({ onProductSelect, activeSeries, onSeriesChange }: ProductL
             </div>
             <div className="flex items-center gap-1 text-orange-500 text-sm font-semibold">
               View Details <ChevronRight size={14} />
+            </div>
             </div>
           </motion.div>
         ))}
@@ -791,11 +800,20 @@ const ProductDetail = ({ product, onBack, onEnquire }: ProductDetailProps) => {
         <ArrowLeft size={16} /> Back to Catalogue
       </button>
 
-      <div className="glass-light border border-white/10 rounded-2xl p-8 mb-6">
-        <div className="text-xs text-orange-500 font-bold tracking-widest uppercase mb-2">{product.series}</div>
-        <h2 className="text-4xl font-black mb-1 gradient-text">{product.name}</h2>
-        <p className="text-orange-400 font-semibold mb-3">{product.tagline}</p>
-        <p className="text-gray-400 leading-relaxed">{product.desc}</p>
+      <div className="glass-light border border-white/10 rounded-2xl overflow-hidden mb-6">
+        <div className="w-full h-64 overflow-hidden bg-white/5">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="p-8">
+          <div className="text-xs text-orange-500 font-bold tracking-widest uppercase mb-2">{product.series}</div>
+          <h2 className="text-4xl font-black mb-1 gradient-text">{product.name}</h2>
+          <p className="text-orange-400 font-semibold mb-3">{product.tagline}</p>
+          <p className="text-gray-400 leading-relaxed">{product.desc}</p>
+        </div>
       </div>
 
       <h3 className="font-black text-lg mb-4 text-gray-300 uppercase tracking-wider">Specifications</h3>
