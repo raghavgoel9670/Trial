@@ -741,7 +741,7 @@ const ProductList = ({ onProductSelect, activeSeries, onSeriesChange }: ProductL
           >
             <div className="w-full h-48 overflow-hidden bg-white/5">
               <img
-                src={p.image}
+                src={`${import.meta.env.BASE_URL}${p.image.replace(/^\//, '')}`}
                 alt={p.name}
                 className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
               />
@@ -803,7 +803,7 @@ const ProductDetail = ({ product, onBack, onEnquire }: ProductDetailProps) => {
       <div className="glass-light border border-white/10 rounded-2xl overflow-hidden mb-6">
         <div className="w-full h-64 overflow-hidden bg-white/5">
           <img
-            src={product.image}
+            src={`${import.meta.env.BASE_URL}${product.image.replace(/^\//, '')}`}
             alt={product.name}
             className="w-full h-full object-cover"
           />
