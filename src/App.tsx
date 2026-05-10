@@ -77,7 +77,7 @@ const PRODUCTS: Product[] = [
     series: 'Rhino',
     tagline: 'Strong Means Rhino',
     desc: 'The ultimate powerhouse for large commercial spaces, gyms, and banquets.',
-    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    image: '/rhino-180.jpg',
     specs: {
       airFlow: '11300 m3/h',
       fanSize: '26 Inches',
@@ -98,7 +98,7 @@ const PRODUCTS: Product[] = [
     series: 'Terminator',
     tagline: 'Ultra High Performance',
     desc: 'Heavy duty performance with maximum air delivery and tank capacity.',
-    image: 'https://images.unsplash.com/photo-1585338007604-f3da7428c5a8?auto=format&fit=crop&q=80&w=800',
+    image: '/terminator-maxx-s-dlx-160.jpg',
     specs: {
       airFlow: '6200 m3/h / 80t',
       fanSize: '22 Inches',
@@ -117,7 +117,7 @@ const PRODUCTS: Product[] = [
     series: 'Terminator',
     tagline: 'Rugged Efficiency',
     desc: 'Standard duty performance for medium to large residential spaces.',
-    image: 'https://images.unsplash.com/photo-1585338007604-f3da7428c5a8?auto=format&fit=crop&q=80&w=800',
+    image: '/terminator-maxx-dlx-160.jpg',
     specs: {
       airFlow: '6200 m3/h / 80t',
       fanSize: '22 Inches',
@@ -136,7 +136,7 @@ const PRODUCTS: Product[] = [
     series: 'Terminator',
     tagline: 'Super Deluxe Range',
     desc: 'Engineered for long-lasting performance and superior air throw.',
-    image: 'https://images.unsplash.com/photo-1585338007604-f3da7428c5a8?auto=format&fit=crop&q=80&w=800',
+    image: '/terminator-s-dlx-160.jpg',
     specs: {
       airFlow: '6200 m3/h',
       fanSize: '22 Inches',
@@ -154,7 +154,7 @@ const PRODUCTS: Product[] = [
     series: 'Terminator',
     tagline: 'Reliable Air Throw',
     desc: 'High performance cooling in a rugged, military-styled design.',
-    image: 'https://images.unsplash.com/photo-1585338007604-f3da7428c5a8?auto=format&fit=crop&q=80&w=800',
+    image: '/terminator-dlx-160.jpg',
     specs: {
       airFlow: '6200 m3/h',
       fanSize: '22 Inches',
@@ -172,7 +172,7 @@ const PRODUCTS: Product[] = [
     series: 'Terminator',
     tagline: 'Compact High Flow',
     desc: 'Efficient airflow design for tight spaces without compromising on power.',
-    image: 'https://drive.google.com/uc?export=view&id=1KQaNmyc9HsQyZ9AW62pziUix_SaXWpSo',
+    image: '/terminator-160.jpg',
     specs: {
       airFlow: '6200 m3/h',
       fanSize: '22 Inches',
@@ -191,7 +191,7 @@ const PRODUCTS: Product[] = [
     series: 'Nexo',
     tagline: 'Stylish Home Cooling',
     desc: 'Compact design with maximum reliability for modern home aesthetics.',
-    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    image: '/nexo-120-dlx.jpg',
     specs: {
       airFlow: '4200 m3/h',
       fanSize: '17 Inches',
@@ -209,7 +209,7 @@ const PRODUCTS: Product[] = [
     series: 'Nexo',
     tagline: 'Value for Home',
     desc: 'Power cooling in a space-saving footprint.',
-    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    image: '/nexo-120.jpg',
     specs: {
       airFlow: '4200 m3/h',
       fanSize: '17 Inches',
@@ -227,7 +227,7 @@ const PRODUCTS: Product[] = [
     series: 'Nexo',
     tagline: 'Compact Power',
     desc: 'Perfect for small rooms and personal spaces.',
-    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    image: '/nexo-jr.jpg',
     specs: {
       airFlow: '2400 m3/h',
       fanSize: '12 Inches',
@@ -246,7 +246,7 @@ const PRODUCTS: Product[] = [
     series: 'Standard',
     tagline: 'The Reliable Standard',
     desc: 'Superior air delivery with a classic, durable design.',
-    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    image: '/tashu-170-st.jpg',
     specs: {
       airFlow: '9500 m3/h',
       fanSize: '24 Inches',
@@ -264,7 +264,7 @@ const PRODUCTS: Product[] = [
     series: 'Standard',
     tagline: 'Performance Plus',
     desc: 'Enhanced air delivery for standard residential needs.',
-    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    image: '/160-st-plus.jpg',
     specs: {
       airFlow: '6200 m3/h',
       fanSize: '22 Inches',
@@ -282,7 +282,7 @@ const PRODUCTS: Product[] = [
     series: 'Standard',
     tagline: 'Efficient Cooling',
     desc: 'Optimal performance with copper heavy duty winding.',
-    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    image: '/150-st.jpg',
     specs: {
       airFlow: '6200 m3/h',
       fanSize: '22 Inches',
@@ -300,7 +300,7 @@ const PRODUCTS: Product[] = [
     series: 'Standard',
     tagline: 'Compact Reliability',
     desc: 'Indigenous technology for small to medium room cooling.',
-    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    image: '/140-st.jpg',
     specs: {
       airFlow: '5100 m3/h',
       fanSize: '20 Inches',
@@ -319,7 +319,7 @@ const PRODUCTS: Product[] = [
     series: 'Copper Heavy Duty',
     tagline: 'Copper Performance',
     desc: 'Premium series featuring heavy duty copper winding for extreme durability.',
-    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    image: '/160-st-plus.jpg',
     specs: {
       airFlow: '6200 m3/h',
       fanSize: '22 Inches',
@@ -337,7 +337,7 @@ const PRODUCTS: Product[] = [
     series: 'Copper Heavy Duty',
     tagline: 'High Efficiency Copper',
     desc: 'Reliable cooling with long-lasting motor life through copper technology.',
-    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    image: '/150-st.jpg',
     specs: {
       airFlow: '6200 m3/h',
       fanSize: '22 Inches',
@@ -355,7 +355,7 @@ const PRODUCTS: Product[] = [
     series: 'Copper Heavy Duty',
     tagline: 'Compact Copper Power',
     desc: 'Powerful copper-wound motor in a space-saving design.',
-    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    image: '/140-st.jpg',
     specs: {
       airFlow: '5100 m3/h',
       fanSize: '20 Inches',
@@ -374,7 +374,7 @@ const PRODUCTS: Product[] = [
     series: 'Heavy Duty',
     tagline: 'Robust Construction',
     desc: 'Designed for the most demanding environments.',
-    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    image: '/160-st-plus.jpg',
     specs: {
       airFlow: '6200 m3/h',
       fanSize: '22 Inches',
@@ -392,7 +392,7 @@ const PRODUCTS: Product[] = [
     series: 'Heavy Duty',
     tagline: 'Industrial Power',
     desc: 'Built to withstand the toughest summer conditions with simplified maintenance.',
-    image: 'https://images.unsplash.com/photo-1591123720164-de1348028a82?auto=format&fit=crop&q=80&w=800',
+    image: '/130-nm-plus.jpg',
     specs: {
       airFlow: '5800 m3/h',
       fanSize: '22 Inches',
