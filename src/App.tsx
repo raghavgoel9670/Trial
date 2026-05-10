@@ -210,7 +210,7 @@ const PRODUCTS: Product[] = [
     series: 'Terminator',
     tagline: 'Compact High Flow',
     desc: 'Efficient airflow design for tight spaces without compromising on power.',
-    image: '/terminator-160.jpg',
+    image: '/Terminator-160.png',
     specs: {
       airFlow: '6200 m3/h',
       fanSize: '22 Inches',
