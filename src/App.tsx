@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from 'react';
+import React, { useState, FormEvent, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { supabase } from "./supabase";
 import {
@@ -57,6 +57,44 @@ interface FeatureDef {
   desc: string;
   Icon: React.ComponentType<{ size?: number; className?: string }>;
 }
+
+// --- Lightbox ---
+
+const Lightbox = ({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) => {
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [onClose]);
+
+  return (
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4 cursor-zoom-out"
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-white bg-white/10 hover:bg-white/20 rounded-full p-2 transition-colors"
+        >
+          <X size={22} />
+        </button>
+        <motion.img
+          initial={{ scale: 0.85, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          exit={{ scale: 0.85, opacity: 0 }}
+          src={src}
+          alt={alt}
+          onClick={e => e.stopPropagation()}
+          className="max-w-full max-h-[90vh] object-contain rounded-xl shadow-2xl cursor-default"
+        />
+      </motion.div>
+    </AnimatePresence>
+  );
+};
 
 // --- Data ---
 
@@ -696,9 +734,11 @@ const ProductList = ({ onProductSelect, activeSeries, onSeriesChange }: ProductL
   const filtered = activeSeries
     ? PRODUCTS.filter(p => p.series === activeSeries)
     : PRODUCTS;
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
 
   return (
     <div className="pt-28 max-w-7xl mx-auto px-6 pb-20">
+      {lightbox && <Lightbox src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox(null)} />}
       <div className="text-xs text-orange-500 font-bold tracking-widest uppercase mb-2">All Models</div>
       <h2 className="text-4xl font-black mb-8 gradient-text">Catalogue</h2>
 
@@ -743,7 +783,8 @@ const ProductList = ({ onProductSelect, activeSeries, onSeriesChange }: ProductL
               <img
                 src={`${import.meta.env.BASE_URL}${p.image.replace(/^\//, '')}`}
                 alt={p.name}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                onClick={e => { e.stopPropagation(); setLightbox({ src: `${import.meta.env.BASE_URL}${p.image.replace(/^\//, '')}`, alt: p.name }); }}
+                className="w-full h-full object-contain transition-transform duration-500 hover:scale-105 cursor-zoom-in"
               />
             </div>
             <div className="p-6">
@@ -780,6 +821,7 @@ interface ProductDetailProps {
 }
 
 const ProductDetail = ({ product, onBack, onEnquire }: ProductDetailProps) => {
+  const [lightbox, setLightbox] = useState<{ src: string; alt: string } | null>(null);
   if (!product) {
     return (
       <div className="pt-32 text-center text-gray-400">
@@ -793,6 +835,7 @@ const ProductDetail = ({ product, onBack, onEnquire }: ProductDetailProps) => {
 
   return (
     <div className="pt-28 px-6 pb-20 max-w-2xl mx-auto">
+      {lightbox && <Lightbox src={lightbox.src} alt={lightbox.alt} onClose={() => setLightbox(null)} />}
       <button
         onClick={onBack}
         className="flex items-center gap-2 mb-8 text-gray-400 hover:text-orange-500 transition-colors text-sm font-semibold"
@@ -805,7 +848,8 @@ const ProductDetail = ({ product, onBack, onEnquire }: ProductDetailProps) => {
           <img
             src={`${import.meta.env.BASE_URL}${product.image.replace(/^\//, '')}`}
             alt={product.name}
-            className="w-full h-full object-cover"
+            onClick={() => setLightbox({ src: `${import.meta.env.BASE_URL}${product.image.replace(/^\//, '')}`, alt: product.name })}
+            className="w-full h-full object-contain cursor-zoom-in"
           />
         </div>
         <div className="p-8">
